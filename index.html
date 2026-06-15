@@ -570,7 +570,7 @@
         </div>
         <div class="stat-box">
           <span class="stat-val" id="find-count">0</span>
-          Descubrimientos
+          carreras
         </div>
       </div>
     </div>
@@ -592,7 +592,7 @@
       <div class="action-btns">
         <button class="btn-action" id="btn-quest">★ Ver misión</button>
         <button class="btn-action" id="btn-hint">🐾 Pista</button>
-        <button class="btn-action" id="btn-log">📜 Lista de descubrimientos</button>
+        <button class="btn-action" id="btn-log">📜 Lista de carreras</button>
         <button class="btn-action" id="btn-help">？ Ayuda</button>
         <button class="btn-action" id="btn-new" style="border-color:var(--country);color:var(--country)">↺ Nueva partida</button>
       </div>
@@ -624,7 +624,7 @@
 
 <div class="modal-overlay" id="modal-log">
   <div class="modal-box">
-    <h3>Lista de descubrimientos</h3>
+    <h3>Lista de carreras</h3>
     <div id="modal-log-content" style="font-size:0.75rem;max-height:320px;overflow-y:auto;line-height:1.9;color:var(--ink)"></div>
     <button class="btn-primary" onclick="closeModal('modal-log')" style="margin-top:14px">Cerrar</button>
   </div>
@@ -634,7 +634,1025 @@
 
 <script>
 // (El script completo con todas las traducciones está incluido. Es muy largo, así que lo pongo en la siguiente parte si necesitas. Pero puedes copiar todo el HTML de arriba y el resto del script original se mantiene funcional con las traducciones aplicadas en las strings.)
+// ═══════════════════════════════════════════════════════
+// DATA TABLES
+// ═══════════════════════════════════════════════════════
+const NAME_FRONT = [
+"Alba", "Val", "Sol", "Luna", "Aure", "Cielo", "Nova", "Rosa",
+"Estra", "Vera", "León", "Casta", "Mira", "Nera", "Dora", "Lucia",
+"Arco", "Sierra", "Monta", "Brisa", "Fuego", "Rio", "Claro", "Sombra",
+"Viento", "Estel", "Corona", "Vega", "Mar", "Isla", "Palma", "Roca",
+"Azul", "Dalia", "Oliva", "Celia", "Runa", "Nube", "Arena", "Flora",
+"Elora", "Sera", "Tierra", "Aurora", "Estrella", "Lirio", "Nexo", "Draco",
+"Ventor", "Cruz", "Solar", "Reina", "Cid", "Gloria", "Valora", "Miranda",
+"Arcadia", "Eldora", "Avalora", "Lumina", "Regna", "Imperia", "Ordia", "Fernia"
+];
 
+const NAME_BACK = [
+"Reino", "Federación", "Federación de Emiratos", "Principado", "Imperio",
+"stán", "País", "República", "República Popular", "Estado Democrático Que Definitivamente No Es Una Dictadura", "Estados Unidos",
+ "Alianza", "Estado", "República Nacional", "Emirato", "Reino", "stán", "Liga Tribal", "Territorio Autónomo",
+"Gran Ducado", "Janato", "Ducado","República Burocrática Antiburocrática"
+];
+
+const CIVIL_SYSTEMS = [
+"Estado que prohíbe la magia", "Liga de ciudades-estado", "Estado sacerdotal", "Estado teocrático", "Liga de comerciantes",
+"Esclavitud", "Meritocracia por exámenes", "Steampunk", "Supremacía mágica", "Rey artista",
+"El mayor mentiroso se convierte en ministro", "Sistema hereditario", "Gobierno provisional permanente", "Nobleza rotativa universal", "Servidumbre",
+"Reformismo permanente", "Todo se resuelve en reuniones", "Sistema de reclutamiento de héroes",
+"Liberalismo", "Sorteo de burócratas", "Aristocracia felina", "Revolución mensual",
+"Derecho divino de los reyes", "Prioridad al que grita más fuerte", "Parlamento de teclados", "República eternamente en fase de borrador",
+"Estado de emergencia permanente", "Feudalismo señorial", "Monarquía dual", "Sistema provincial",
+"Anti-Legión del Combustible", "Feudalismo caballeresco", "Gobierno provisional con reelección infinita",
+"Mandato mágico del cielo", "Sistema de magia compartida", "Estado títere de la Legión del Combustible"
+];
+
+const TRIBE_SYSTEMS = [
+"Sistema de clanes", "Sociedad sin orden", "Culto al falo", "Culto al excremento",
+"Sistema de reparto por piedra-papel-tijera", "Culto a la carga de los barcos", "Sistema chamánico", "Propiedad comunal",
+"Culto al capibara", "Consejo de ancianos", "Moneda basada en bananas", "Culto a la yuca",
+"Adivinación con caparazones de tortuga", "Oráculo de hongos del jefe tribal", "Profecía del niño ciego",
+"Cultura caníbal", "Culto a los extraños megalitos"
+];
+const RUMORS = [
+"Los martes está prohibido comer", "Comer verduras se considera impuro", "Adoran a los zorrillos",
+"Comen perros", "Llevan peinados parecidos a colas de ratón", "Creen que existen muchos géneros",
+
+"La homosexualidad es ilegal", "No tienen apellidos", "Está prohibido dormir dentro de las casas",
+"Les encanta pedir disculpas", "Hacen sus necesidades en la calle", "Se tiran pedos ruidosamente en público",
+
+"El ministro de educación es analfabeto", "Beben jugo de frijoles podridos", "Discriminan a los gatos",
+"Adoran a un ministro gordo", "No existen los cubos de basura", "Adoran a elfos rubios de piel blanca",
+
+"La educación está prohibida por ley", "Creen que existen muchos géneros", "Las mujeres aquí tienen un carácter muy fuerte",
+"No existe la propiedad privada", "Beber refresco goblin es ilegal", "Existen miles de idiomas",
+
+"No se puede cortar los fideos con los dientes", "Les gusta la cocina de los hombres panda", "Los analfabetos se sienten orgullosos de serlo",
+"Los extranjeros son rodeados y observados", "Les gusta comer animales extraños", "Son extremadamente patrióticos",
+
+"Los hombres pueden tener varias esposas", "La gente aquí no hace fila", "No reconocen los derechos legales de los antiguos hombres máquina",
+"Beber refresco goblin es ilegal", "Existen cientos de idiomas", "Lavan la ropa con orina",
+
+"Los hombres no tienen estatus social", "Está prohibido dar la mano izquierda", "Los animales pueden ser juzgados en tribunales",
+"A los hombres de mediana edad les gusta mostrar la barriga", "Son extremadamente patrióticos", "Los hombres pueden tener varias esposas",
+
+"La gente aquí no hace fila", "Creen que las momias son medicina", "Hay filósofos que afirman que el mundo es un juego de texto",
+"Comer pollo se considera impuro", "La entrada de búhos está prohibida", "Creen que las brujas son ladronas",
+
+"Es ilegal exportar el semen de las vacas del país", "A medianoche todos se arrodillan mirando hacia la capital",
+"Las mujeres ríen como si gruñeran cerdos", "Les gusta comer carne cruda", "Los hombres son muy pervertidos",
+
+"Discriminan a la raza humana", "Aquí curiosamente no discriminan a la tribu del mal olor corporal",
+"Discriminan a las personas gordas", "Adoran a las brujas", "Comen gatos",
+
+"Creen que la tribu del mal olor corporal huele bien", "El jefe de estado pertenece a la tribu del mal olor corporal",
+"Celebran muchos festivales relacionados con los muertos", "El ministro de salud pertenece a la tribu del mal olor corporal",
+
+"Hay muchas personas transgénero", "Los pantalones rotos están de moda", "Creen que los vaqueros sucios y malolientes son elegantes",
+"Creen que mostrar la ropa interior es moderno", "Se puede asistir a reuniones de la corte usando sandalias",
+
+"Los hombres son especialmente pervertidos", "Está prohibido conversar en los cafés",
+"Creen que la tribu del mal olor corporal huele bien", "La peste negra se está propagando en este país",
+
+"Hay una revolución en curso", "Exterminaron a los pueblos indígenas de la región",
+"Hubo un genocidio en el pasado", "Invadieron a un país vecino en el pasado",
+
+"Fueron invadidos por un país vecino en el pasado", "Un anciano ministro se hace encima todos los días",
+"La riqueza se mide por la cantidad de calcetines malolientes", "La ley exige dos horas de siesta al día",
+
+"Discriminan a la tribu vecina", "Adoran a la Legión del Combustible",
+"Este país acaba de descubrir restos de un dios antiguo"
+];
+
+
+const TRIBE_RUMORS = [
+"Siempre sonríen de forma extraña", "El jefe tribal es homosexual", "Discriminan a la gente civilizada",
+"Adoran a los objetos voladores no identificados", "Adoran a los tontos", "Fueron masacrados por la Legión del Combustible",
+
+"Creen que su tribu es el centro del mundo", "Hay rumores sobre el jefe tribal y la sacerdotisa",
+"Hay rumores sobre el jefe tribal y el sacerdote", "Una tribu que come brujas",
+
+"No tienen concepto de los números", "Cada verano celebran un concurso de orina",
+"De repente imitan los gritos de los monos", "El estatus social depende del volumen de los pedos",
+
+"El jefe tribal sabe cálculo diferencial e integral", "Les encanta el jugo verde de insectos",
+"Todos pueden escuchar los susurros de los dioses antiguos"
+];
+
+const SPECIALTIES = [
+"Tacones altos de cristal", "Lona ultrabarata para dirigibles", "Calabaza gigante",
+"Ají ígneo", "Pez volador", "Raíz idéntica a un ser humano",
+
+"Maíz fúngico mortal", "Manzana transparente", "Esfera de cristal luminosa",
+"Granos de café mágico", "Queso de leche de dragón", "La nueva ropa del emperador",
+
+"Carne de caracol gigante", "Banana de cristal", "Sandía explosiva",
+"Papel higiénico rosa", "Hamburguesa que nunca se pudre", "Sandía cuadrada",
+
+"Cómics extraños", "Té del Rey Mono Gigante", "Caramelos de bigotes de gato",
+"Perfume de mal olor corporal", "Tetera de obsidiana",
+
+"Hierba que te convierte en insecto", "Inodoro mágico cantante",
+"Tiburón fermentado", "Lata de testículos de cabra", "Insectos fritos",
+
+"Licor de serpiente", "Caja parlante", "Huevos de dragón legales",
+"Dirigible mágico", "Hierba gatera artificial",
+
+"Ramen ruidoso", "Traductor de idioma felino",
+"Tetera de obsidiana", "Hierba que te convierte en insecto",
+
+"Escoba voladora de lujo", "Refrigerador", "Sin especialidades",
+"Insecto de arena para gatos que bebe orina felina",
+
+"Cuchillo mágico universal", "Varita mágica barata para aprendices",
+"Huevos de dragón de contrabando", "Núcleo de dirigible mágico",
+
+"Hierba gatera de lujo", "Máscara anti-mal olor corporal",
+"Extractor de restos de dioses antiguos", "Máquina de combustible para dirigibles"
+];
+
+const TRIBE_SPECIALTIES = [
+"Licor de banana silvestre", "Amuleto de piedra gigante", "Carne seca de lagarto",
+"Polvo misterioso de hongos", "Tambor artesanal de piel de bestia",
+
+"Talla de madera de los ancestros", "Salsa de pescado fermentada",
+"Adorno de plumas rosadas", "Bolsa de hierbas mágicas (ingredientes desconocidos)",
+
+"Collar de huesos extraños",
+"Flauta de pedos (hace que los pedos suenen hermosos)",
+
+"Collar de ojo de gato", "Excremento del jefe tribal",
+"No tienen ninguna especialidad particularmente rara",
+
+"Arañas secas extremadamente picantes", "Tabaco sospechoso",
+"Piedra recogida del suelo", "Palo de madera anormalmente recto",
+
+"Momia de murciélago", "Muñeca inquietante",
+"Recipiente hecho con el cráneo de un animal desconocido",
+
+"Martillo para golpear topos",
+"Yaddu (instrumento musical hecho con pene seco de elefante)",
+
+"Botella de cola desechada por la Legión del Combustible"
+];
+
+const WRITINGS = [
+"Jeroglíficos", "Escritura sagrada ilustrada", "Silabario",
+"Runas mágicas élficas", "Escritura de cuerdas de capibara",
+
+"Alfabeto de 38 letras", "Alfabeto tonal de 38 letras",
+"Escritura de plumas", "Escritura sobre corteza", "Código cifrado",
+
+"Escritura de conchas", "Escritura lineal",
+"Escritura astral antigua", "Adaptación de la escritura de un país vecino",
+
+"Extraña escritura similar a un alfabeto",
+"Alfabeto extraño", "Braille", "Emojis simplificados",
+
+"Libros caminantes", "Escritura de garras de hombre gato",
+"Escritura de colmillos de dragón",
+
+"Escritura que se lee al revés",
+"Emojis dibujados en arena",
+
+"Caracteres panda mezclados con alfabeto",
+"Sin sistema de escritura",
+
+"Escritura de engranajes", "Símbolos mecánicos",
+"Cientos de tipos de caracteres",
+
+"Escritura hexadecimal de los antiguos hombres máquina",
+"Escritura binaria de los antiguos hombres máquina",
+
+"Lenguaje de señas", "Señales con banderas",
+"Escritura de orina",
+
+"Miles de tipos de caracteres",
+"Escritura coloreada",
+
+"Escritura mediante notas musicales",
+"Escritura del alma",
+"Escritura espiral de los antiguos hombres máquina",
+
+"Alfabeto de 37 letras",
+"Escritura faunesca",
+
+"Escritura de telarañas",
+"Garabatos de excremento",
+"Tablillas cuneiformes",
+
+"Escritura en pergamino",
+"Caracteres que parecen inodoros vistos desde distintos ángulos",
+
+"Escritura de bronce de los no muertos",
+"Escritura de pulpo de cómic",
+
+"Escritura laberíntica",
+"Escritura oracular",
+"Escritura de columnas sacerdotales",
+
+"Caracteres panda simplificados",
+"Escritura de renacuajos",
+
+"Runas enanas",
+"Inscripciones orcas",
+"Escritura tridimensional de gigantes",
+
+"Escritura goblin",
+"Caracteres que parecen conchas desde distintos ángulos",
+
+"Caracteres panda tradicionales",
+"Escritura de los dioses antiguos",
+
+"Caracteres en forma de resorte",
+"Escritura sobre huesos oraculares",
+
+"Escritura antigua indescifrable",
+"Escritura estelar"
+];
+const RACES = [
+"Humanos", "Elfos", "Enanos", "Goblins",
+"Felinos", "Dracónidos", "Gigantes", "Faunos",
+"Pándidos", "Axilares", "Capibarianos",
+"No Muertos", "Mecánicos Antiguos"
+];
+const CAT_QUOTES = [
+"¡Miau! Mucha gente ni siquiera sabe que el combustible de los dirigibles se fabrica con restos de dioses antiguos.",
+"¡Miau! Aquellos capibaras de la otra vez eran realmente buena gente.",
+"¡Miau! ¿Ese olor es de tiburón fermentado o hay miembros de la Tribu del Mal Olor Corporal cerca?",
+"¡Miau! Esta vez procura no estrellarte contra el huerto de alguien. Ya me cansé de disculparme por las tonterías de una bruja tonta.",
+"Según mi experiencia, cuando {witch_name} dice 'seguro que todo irá bien', es cuando más peligro hay.",
+"¡Miau! ¿De verdad vas a comprar eso? La última 'Poción de Vuelo Totalmente Segura' casi nos hizo caer dentro de un volcán.",
+"{witch_name}, ve a dormir ya. Yo vigilaré la ruta. N-no es que esté preocupado por ti ni nada.",
+"¿Ese tipo? Se ve sospechoso a kilómetros. Nunca confíes en alguien cuya sonrisa brilla demasiado.",
+"¡Miau...! No sé por qué, pero siento que alguien nos está observando.",
+"¡Miau, {witch_name}! Tengo hambre.",
+"¡Miau! Hoy es un día perfecto para una siesta.",
+"¡Miau! Creo que hay peces por delante.",
+"¿Ese es el combustible que compraste a la Legión del Combustible por una fortuna? Me pregunto cuántas bolsas de hierba gatera costaría.",
+"¡Miau! Este lugar no me gusta mucho.",
+"¡Miau...! No sé por qué, pero siento que alguien nos está observando.",
+"No es que quiera acompañarte. Es que si vas solo, probablemente hundirás el dirigible en el océano.",
+"¡MIAU! ¡Se me ha caído otro montón de pelo!",
+"¡Miau! {witch_name}, ¡limpia la caja de arena primero!",
+"¡Miau! {witch_name}, ¿trajiste comida enlatada?",
+"¡Miau! Todos los antiguos hombres máquina creen que son humanos.",
+"¡Miau! Donde hay restos de dioses antiguos, siempre aparece la Legión del Combustible.",
+"¡Miau! Estadísticamente hablando, cuando alguien dice 'esta ruta será fácil', la probabilidad de accidente se triplica.",
+"¡Miau! Ya te lo he dicho muchas veces. Eso no fue un aterrizaje de emergencia; fue un accidente. Solo tuviste suerte de caer sobre una pradera.",
+"¡Miau! {witch_name}, ¿trajiste hierba gatera?",
+"¡Miau! Aún pienso que aquel queso de leche de dragón fue lo mejor que hemos probado."
+];
+const seaScenes = [
+    {
+        name: "Ruinas del Faro de los Antiguos Hombres Máquina",
+        comment: "¡Miau! Estos números y símbolos parecen escritura hexadecimal de los antiguos hombres máquina."
+    },
+
+    {
+        name: "Restos de un Barco Hundido",
+        comment: "¡Miau! Parece que hay un naufragio debajo. Tal vez encontremos algún tesoro."
+    },
+
+    {
+        name: "Banco de Medusas Luminosas",
+        comment: "La superficie del mar brilla como si alguien hubiera esparcido estrellas."
+    },
+
+    {
+        name: "Misterioso Mar del Triángulo Negro",
+        comment: "¡Miau...! Tengo la sensación de que alguien nos observa. ¡Eh, estas coordenadas! ¡Salgamos de aquí!"
+    },
+
+    {
+        name: "Zona de Basura Flotante",
+        comment: "¡Miau...! Es una isla hecha de basura. Qué asco. ¿De verdad tiran tanto al mar?"
+    },
+
+    {
+        name: "Gigantesco Yacimiento de Restos de Dioses Antiguos",
+        comment: "¡Miau...! Mira eso. Hay innumerables ojos moviéndose sobre esos restos negros. La Legión del Combustible acabará viniendo aquí."
+    },
+
+    {
+        name: "Bahía del Bosque de Piedra",
+        comment: "Innumerables agujas de piedra caliza emergen del mar como colmillos de dragón."
+    },
+
+    {
+        name: "Archipiélago de Jade",
+        comment: "Cientos de islas verdes se dispersan por el océano como si fragmentos de jade flotaran sobre el agua."
+    },
+
+    {
+        name: "Arrecifes de la Niebla",
+        comment: "Una niebla gris cubre la zona durante todo el año y apenas deja ver los arrecifes."
+    },
+
+    {
+        name: "Cordillera de Espinas de Dragón",
+        comment: "Picos oscuros se alinean como una enorme serpiente. Parecen la columna vertebral de un dragón dormido."
+    },
+
+    {
+        name: "Bahía de las Islas Flotantes",
+        comment: "Algunas rocas flotan en el aire y proyectan enormes sombras sobre el mar."
+    },
+
+    {
+        name: "Cementerio de Ballenas Gigantes",
+        comment: "Los esqueletos de enormes ballenas flotan sobre el mar formando un silencioso bosque de huesos."
+    },
+
+    {
+        name: "Archipiélago Volcánico",
+        comment: "Columnas de humo blanco se elevan desde las islas volcánicas negras y el agua parece hervir."
+    },
+
+    {
+        name: "Laberinto de Coral",
+        comment: "Corales de vivos colores forman un laberinto submarino por el que nadan innumerables peces."
+    },
+
+    {
+        name: "Mar de Icebergs",
+        comment: "Gigantescos icebergs azulados flotan a la deriva y el frío golpea como un muro."
+    },
+
+    {
+        name: "Bahía del Sueño del Dragón",
+        comment: "Una bahía extrañamente silenciosa. La leyenda dice que un antiguo dragón duerme en el fondo marino."
+    },
+
+    {
+        name: "Blue Hole del Templo Infinito",
+        comment: "Un enorme agujero azul se abre en el mar. A su lado se alza un templo de la Tribu del Mal Olor Corporal."
+    },
+
+    {
+        name: "Blue Hole del Ojo del Abismo",
+        comment: "Un inmenso agujero marino con forma de ojo. El agua gira lentamente formando remolinos."
+    },
+
+    {
+        name: "Blue Hole del Ojo del Dragón Divino",
+        comment: "Una fosa legendaria que, según cuentan, se formó cuando cayó un dragón antiguo. También se ve un templo de los hombres dragón."
+    },
+
+    {
+        name: "Volcán Submarino de los Dioses Antiguos",
+        comment: "Restos de dioses antiguos cubiertos de ojos flotan en la superficie mientras profundos rugidos emergen desde el océano."
+    },
+
+    {
+        name: "Mar de la Noche Eterna",
+        comment: "Una capa de nubes negras bloquea casi toda la luz del sol."
+    },
+
+    {
+        name: "Mar Fluorescente",
+        comment: "Cada ola brilla con tonos azul verdosos. De noche parece una galaxia."
+    },
+
+    {
+        name: "Gran Blue Hole Oceánico",
+        comment: "Un gigantesco agujero azul se abre en mitad del océano. Es imposible ver el fondo."
+    },
+
+    {
+        name: "Atolón de la Luna Creciente",
+        comment: "Bancos de arena blanca forman una media luna perfecta y la laguna central tiene un azul de ensueño."
+    },
+
+    {
+        name: "Mar de los Mil Anillos",
+        comment: "Atolones de todos los tamaños se dispersan por el océano como un collar de jade de un gigante."
+    },
+
+    {
+        name: "Atolón del Dragón",
+        comment: "Las islas coralinas dibujan la silueta de un gigantesco dragón."
+    },
+
+    {
+        name: "Archipiélago de la Estrella",
+        comment: "Cinco atolones forman una estrella perfecta. También quedan ruinas de los antiguos hombres máquina."
+    },
+
+    {
+        name: "Atolón del Reino Hundido",
+        comment: "Bajo las aguas cristalinas descansan las ruinas de una antigua ciudad élfica."
+    },
+
+    {
+        name: "Atolón Arcoíris",
+        comment: "Corales de todos los colores forman un círculo perfecto, como si un arcoíris hubiera caído al mar."
+    },
+
+    {
+        name: "Sucursal Abisal de Energía de la Legión del Combustible",
+        comment: "Una gigantesca isla artificial llena de pozos petroleros. Es conocida como la fortaleza flotante invencible de la Legión del Combustible."
+    },
+
+    {
+        name: "Compañía Energética Unificada de la Legión del Combustible",
+        comment: "Una enorme instalación que extrae combustible negro de los restos de los dioses antiguos sin descanso."
+    },
+
+    {
+        name: "Base de la Flota de Dirigibles de la Legión del Combustible",
+        comment: "¡Miau...! Está llena de cañones y dirigibles armados. Mejor hagamos como si fuéramos gaviotas."
+    },
+
+    {
+        name: "Base Naval de la Legión del Combustible",
+        comment: "Un enorme puerto militar repleto de dirigibles acorazados y buques de guerra de acero."
+    }
+];
+
+const RARE_EVENTS_BASE = [
+  "★ Se descubrió una isla flotante",
+  "★ Se vio un dragón gigante cruzando el cielo",
+  "★ Se avistó una gigantesca flota de dirigibles de la Legión del Combustible",
+  "★ El dirigible logró pasar tres días seguidos sin estrellarse contra una montaña",
+  "★ Se encontró un mapa misterioso, pero resultó ser un dibujo de un niño de la Tribu del Mal Olor Corporal",
+  "★ Se presenció una gran pelea entre capibaras",
+  "★ Se encontró a antiguos hombres máquina alineados y acostados en el suelo",
+  "★ Un noble elfo estaba orinando desde un dirigible",
+  "★ Se vio una enorme máquina sobre las nubes, pero desapareció en un instante",
+  "★ Pasó un dirigible turístico de capibaras y saludaron quitándose el sombrero",
+  "★ Se avistó un viejo dirigible fantasma abandonado",
+  "★ Al abrir un cofre apareció una nota que decía: '¡Eres un idiota!'",
+  "★ ¡Se acercaba una tormenta! El gato negro nos advirtió con un maullido agudo y logramos evitarla",
+  "★ ¡Nos encontramos con un objeto volador misterioso! Desapareció enseguida",
+  "★ Casi nos descubren unos piratas. El gato negro mordió una vela y conseguimos escapar",
+  "★ Volamos a través de una lluvia de meteoros. Algunas piedras golpearon el dirigible, pero sobrevivimos",
+  "★ Descubrimos un gigantesco castillo de nubes, pero desapareció al acercarnos. ¿Un espejismo?",
+  "★ El gato negro tuvo un sueño. Dice que mañana será un día de suerte",
+  "★ Se encontró una vieja carta dentro de una botella. Está escrita en un idioma desconocido",
+  "★ Una bandada de aves migratorias rodeó el dirigible. ¿Será una señal?"
+];
+
+const CAT_WEATHER = {
+  equator: [
+    "¡Miau! Cerca del ecuador hace demasiado calor. Siento que mi pelaje va a explotar."
+  ],
+
+  tropical: [
+    "¡Miau! Aquí hace tanto calor que los peces podrían cocinarse solos.",
+    "¡Miau! El viento tropical es pegajoso.",
+    "¡Miau! Quiero esconderme bajo la sombra del dirigible."
+  ],
+
+  temperate: [
+    "¡Miau! El clima aquí es perfecto. Ideal para una siesta.",
+    "¡Miau! La brisa se siente muy agradable.",
+    "¡Miau! Seguro que por aquí hay muchas ciudades humanas."
+  ],
+
+  cold: [
+    "¡Miau! Empieza a hacer frío. Quiero meterme dentro de la capa de la bruja.",
+    "¡Miau! El viento se está volviendo más frío.",
+    "¡Miau! Esas nubes parecen estar hechas de hielo."
+  ],
+
+  polar: [
+    "¡Miau! ¡Qué frío! Hasta la arena para gatos se congeló.",
+    "¡Miau! No pienso volver a volar hacia las regiones polares.",
+    "¡Miau! Este no es un lugar para gatos."
+  ]
+};
+
+const VAGUE_WORDS = [
+  "hay un olor extraño por aquí",
+  "se percibe débilmente en el viento",
+  "mis bigotes lo sienten",
+  "las estrellas parecen señalarlo",
+  "no estoy seguro, pero probablemente"
+];
+
+// ═══════════════════════════════════════════════════════
+// GAME ENGINE
+// ═══════════════════════════════════════════════════════
+const STEP = 10, LAT_LIMIT = 70;
+
+let world = {}, player = {}, lat = 0, lon = 0;
+let currentQuest = null, stepsAfterQuest = 0, moveCount = 0, findCount = 0;
+let rareEvents = [];
+let typewriterTimeout = null;
+
+function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function rndInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+
+function makeCountryName() { return rnd(NAME_FRONT) + rnd(NAME_FRONT) + rnd(NAME_BACK); }
+function makeTribeName()   { return rnd(NAME_FRONT) + rnd(NAME_FRONT); }
+
+function makeRacePercent() {
+  const count = rndInt(1, 12);
+  const chosen = [...RACES].sort(() => Math.random() - 0.5).slice(0, count);
+  const nums = chosen.map(() => rndInt(1, 100));
+  const total = nums.reduce((a, b) => a + b, 0);
+  const result = {};
+  let remaining = 100;
+  chosen.forEach((race, i) => {
+    if (i === count - 1) { result[race] = remaining; }
+    else {
+      let p = Math.round(nums[i] / total * 100);
+      p = Math.max(1, Math.min(p, remaining - 1));
+      result[race] = p;
+      remaining -= p;
+    }
+  });
+  return result;
+}
+
+function makeCountry() {
+  return { type: "nación", name: makeCountryName(), size: rndInt(2, 11),
+    system: rnd(CIVIL_SYSTEMS), rumor: rnd(RUMORS), specialty: rnd(SPECIALTIES),
+    races: makeRacePercent(), writing: rnd(WRITINGS) };
+}
+function makeTribe() {
+  return { type: "tribu", name: makeTribeName(), size: 1,
+    system: rnd(TRIBE_SYSTEMS), rumor: rnd(TRIBE_RUMORS), specialty: rnd(TRIBE_SPECIALTIES),
+    race: rnd(RACES) };
+}
+
+function allCoords() {
+  const c = [];
+  for (let la = -60; la < 70; la += 10)
+    for (let lo = -180; lo <= 180; lo += 10)
+      c.push([la, lo]);
+  return c;
+}
+
+function neighbors(la, lo) {
+  const result = [];
+  for (const [dla, dlo] of [[10,0],[-10,0],[0,10],[0,-10]]) {
+    let nla = la + dla, nlo = lo + dlo;
+    if (nla >= LAT_LIMIT || nla <= -LAT_LIMIT) continue;
+    if (nlo > 180) nlo = -170;
+    else if (nlo < -180) nlo = 170;
+    result.push([nla, nlo]);
+  }
+  return result;
+}
+
+function key(la, lo) { return `${la},${lo}`; }
+
+function growLand(w, start, size, terrain) {
+  const land = new Set([key(...start)]);
+  const frontier = [start];
+  while (land.size < size && frontier.length) {
+    const cur = frontier[Math.floor(Math.random() * frontier.length)];
+    const ns = neighbors(...cur).sort(() => Math.random() - 0.5);
+    let added = false;
+    for (const n of ns) {
+      if (!land.has(key(...n))) { land.add(key(...n)); frontier.push(n); added = true; break; }
+    }
+    if (!added) frontier.splice(frontier.indexOf(cur), 1);
+  }
+  for (const k of land) w[k].terrain = terrain;
+  return [...land];
+}
+
+function growSiteOnLand(w, start, size, siteData) {
+  const territory = new Set([key(...start)]);
+  const frontier = [start];
+  while (territory.size < size && frontier.length) {
+    const cur = frontier[Math.floor(Math.random() * frontier.length)];
+    const ns = neighbors(...cur).sort(() => Math.random() - 0.5);
+    let added = false;
+    for (const n of ns) {
+      const k = key(...n);
+      if (!territory.has(k) && w[k].terrain === "continente" && w[k].site === null) {
+        territory.add(k); frontier.push(n); added = true; break;
+      }
+    }
+    if (!added) frontier.splice(frontier.indexOf(cur), 1);
+  }
+  for (const k of territory) w[k].site = siteData;
+}
+
+function generateWorld() {
+  const w = {};
+  for (const c of allCoords()) w[key(...c)] = { terrain:"mar", site:null, sea_scene:null, discovered:false };
+
+  const continentCount = rndInt(5, 10);
+  const islandCount = rndInt(70, 200);
+  const coords = allCoords();
+
+  for (let i = 0; i < continentCount; i++) {
+    const start = rnd(coords);
+    growLand(w, start, rndInt(5, 60), "continente");
+  }
+
+  let seaCoords = coords.filter(c => w[key(...c)].terrain === "mar");
+  for (let i = 0; i < islandCount; i++) {
+    if (!seaCoords.length) break;
+    const idx = Math.floor(Math.random() * seaCoords.length);
+    const c = seaCoords[idx];
+    w[key(...c)].terrain = "isla";
+    seaCoords.splice(idx, 1);
+  }
+
+  const landCells = coords.filter(c => w[key(...c)].terrain === "continente").sort(() => Math.random() - 0.5);
+  for (const c of landCells) {
+    const k = key(...c);
+    if (w[k].site !== null) continue;
+    const roll = Math.random();
+    if (roll < 0.25) {
+      const country = makeCountry();
+      growSiteOnLand(w, c, country.size, country);
+    } else if (roll < 0.45) {
+      w[k].site = makeTribe();
+    } else {
+      w[k].site = rnd(["bosque", "cordillera", "desierto", "lago"]);
+    }
+  }
+
+  for (const k of Object.keys(w)) {
+    if (w[k].terrain === "isla") w[k].site = Math.random() < 0.45 ? makeTribe() : "isla desierta";
+    if (w[k].terrain === "mar" && Math.random() < 0.20) w[k].sea_scene = rnd(seaScenes);
+  }
+  return w;
+}
+
+function makeQuest(w) {
+  const targets = [];
+  for (const [k, cell] of Object.entries(w))
+    if (cell.site && cell.site.type === "nación") targets.push([k, cell.site]);
+  const [, site] = rnd(targets);
+  const targetCoords = Object.entries(w).filter(([,c]) => c.site === site).map(([k]) => k);
+  const questType = Math.random() < 0.5 ? "specialty" : "rumor";
+  const target = site[questType];
+  const label = questType === "specialty" ? "Productos" : "anécdota";
+  return { type: questType, target, targetCoords, text: `Misión: Encuentra una nación de ${label} llamada "${target}".` };
+}
+
+function checkQuest(la, lo, q) {
+  const cell = world[key(la, lo)];
+  if (!cell || !cell.site || typeof cell.site !== "object") return false;
+  return cell.site[q.type] === q.target;
+}
+
+function questHint(la, lo, q) {
+  const dist = k => { const [a,b] = k.split(",").map(Number); return Math.abs(a - la) + Math.abs(b - lo); };
+  const closest = q.targetCoords.reduce((a, b) => dist(a) < dist(b) ? a : b);
+  const [tla, tlo] = closest.split(",").map(Number);
+  let dir = "";
+if (tla > la) dir += "norte";else if (tla < la) dir += "sur";
+
+if (tlo > lo) dir += "este";else if (tlo < lo) dir += "oeste";
+
+if (!dir) return `${player.cat}: ¡Miau! ¡El objetivo está justo aquí!`;
+
+return `${player.cat}: ¡Miau! ${rnd(VAGUE_WORDS)}, el objetivo está hacia el ${dir}.`;
+}
+
+function catWeather(la) {
+  const a = Math.abs(la);
+  if (a === 0) return rnd(CAT_WEATHER.equator);
+  if (a <= 20) return rnd(CAT_WEATHER.tropical);
+  if (a <= 40) return rnd(CAT_WEATHER.temperate);
+  if (a <= 60) return rnd(CAT_WEATHER.cold);
+  return rnd(CAT_WEATHER.polar);
+}
+
+function coordText(la, lo) {
+ const latText =
+  la > 0 ? `${la}° N` :
+  la < 0 ? `${Math.abs(la)}° S` :
+  "Ecuador";
+
+const lonText =
+  lo > 0 ? `${lo}° E` :
+  lo < 0 ? `${Math.abs(lo)}° O` :
+  "Meridiano de Greenwich";
+  return `${latText} / ${lonText}`;
+}
+
+// ═══════════════════════════════════════════════════════
+// UI UPDATES
+// ═══════════════════════════════════════════════════════
+const TERRAIN_COLORS = {
+  "mar":"#4a7fa5","continente":"#7a9e5f","isla":"#a8b870","nación":"#c06030",
+  "tribu":"#9060a0","bosque":"#4a7a40","cordillera":"#8a7a6e","desierto":"#c8a85a",
+  "lago":"#5a9ab0","isla desierta":"#c8b870"
+};
+
+function typewriter(el, text, speed = 28) {
+  if (typewriterTimeout) clearTimeout(typewriterTimeout);
+  el.innerHTML = "";
+  let i = 0;
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  el.appendChild(cursor);
+  function tick() {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i++]), cursor);
+      typewriterTimeout = setTimeout(tick, speed);
+    } else { cursor.remove(); }
+  }
+  tick();
+}
+
+function updateMap() {
+  const canvas = document.getElementById("map-canvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const cols = 37, rows = 14;
+  const cw = W / cols, ch = H / rows;
+
+  ctx.fillStyle = "#3a6e98";
+  ctx.fillRect(0, 0, W, H);
+
+  // grid
+  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.lineWidth = 0.5;
+  for (let c = 0; c <= cols; c++) { ctx.beginPath(); ctx.moveTo(c * cw, 0); ctx.lineTo(c * cw, H); ctx.stroke(); }
+  for (let r = 0; r <= rows; r++) { ctx.beginPath(); ctx.moveTo(0, r * ch); ctx.lineTo(W, r * ch); ctx.stroke(); }
+
+  for (const [k, cell] of Object.entries(world)) {
+    if (!cell.discovered) continue;
+    const [la, lo] = k.split(",").map(Number);
+    const col = (lo + 180) / 10;
+    const row = rows - 1 - (la + 60) / 10;
+    const x = col * cw, y = row * ch;
+
+    let color = TERRAIN_COLORS[cell.terrain] || "#4a7fa5";
+    if (cell.site && typeof cell.site === "object") {
+      color = cell.site.type === "nación" ? TERRAIN_COLORS["nación"] : TERRAIN_COLORS["tribu"];
+    } else if (typeof cell.site === "string") {
+      color = TERRAIN_COLORS[cell.site] || color;
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x + 1, y + 1, cw - 2, ch - 2);
+
+    if (typeof cell.site === "object" && cell.site && cell.site.name) {
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = `${Math.max(6, cw * 0.45)}px 'Noto Serif JP', serif`;
+      ctx.textAlign = "center";
+      ctx.fillText(cell.site.name[0], x + cw / 2, y + ch * 0.72);
+    }
+  }
+
+  // current position
+  const curCol = (lon + 180) / 10;
+  const curRow = rows - 1 - (lat + 60) / 10;
+  const cx = curCol * cw + cw / 2, cy = curRow * ch + ch / 2;
+  ctx.fillStyle = "#e03030";
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.min(cw, ch) * 0.38, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // airship icon
+  ctx.fillStyle = "#fff";
+  ctx.font = `${Math.max(9, cw * 0.55)}px serif`;
+  ctx.textAlign = "center";
+  ctx.fillText("✈", cx, cy + cw * 0.22);
+}
+
+function updateInfo() {
+  document.getElementById("coord-display").textContent = coordText(lat, lon);
+
+  const cell = world[key(lat, lon)];
+  const badge = document.getElementById("terrain-badge");
+  badge.textContent = cell.terrain;
+  badge.style.background = TERRAIN_COLORS[cell.terrain] || "#4a7fa5";
+
+  const siteEl = document.getElementById("site-info");
+  const site = cell.site;
+
+  if (!site) {
+    if (cell.sea_scene) {
+      siteEl.innerHTML = `<div class="site-name">⚓ ${cell.sea_scene.name}</div><div style="color:var(--ink-faded);font-style:italic">${cell.sea_scene.comment}</div>`;
+    } else {
+      siteEl.innerHTML = `<span style="color:var(--ink-faded);font-style:italic">Lo único que veo son nubes, el mar y una niebla lejana.</span>`;
+    }
+  } else if (typeof site === "string") {
+    const icons = {"bosque":"🌲","cordillera":"⛰","desierto":"🏜","lago":"🏞","isla desierta":"🏝"};
+    siteEl.innerHTML = `<div class="site-name">${icons[site]||"◆"} ${site}</div>`;
+  } else if (site.type === "nación") {
+    let raceHtml = '<div class="race-bar-wrap">';
+    const hues = [0,30,60,120,180,200,240,270,300,330,15,45];
+    let i = 0;
+    for (const [race, pct] of Object.entries(site.races)) {
+      const hue = hues[i++ % hues.length];
+      raceHtml += `<div class="race-row"><span class="race-name">${race}</span><div class="race-bar-bg"><div class="race-bar-fill" style="width:${pct}%;background:hsl(${hue},55%,45%)"></div></div><span class="race-pct">${pct}%</span></div>`;
+    }
+    raceHtml += '</div>';
+    siteEl.innerHTML = `
+      <div class="site-name">🏛 ${site.name}</div>
+      <div><span class="label">sistema：</span>${site.system}</div>
+      <div><span class="label">anécdota：</span>${site.rumor}</div>
+      <div><span class="label">Productos：</span>${site.specialty}</div>
+      <div><span class="label">Palabra：</span>${site.writing}</div>
+      <div><span class="label">área：</span>${site.size}enrejado</div>
+      ${raceHtml}`;
+  } else if (site.type === "tribu") {
+    siteEl.innerHTML = `
+      <div class="site-name">🔥 ${site.name}</div>
+      <div><span class="label">sistema：</span>${site.system}</div>
+      <div><span class="label">anécdota：</span>${site.rumor}</div>
+      <div><span class="label">Productos：</span>${site.specialty}</div>
+      <div><span class="label">carrera：</span>${site.race}</div>`;
+  }
+
+  // stats
+  const discovered = Object.values(world).filter(c => c.discovered).length;
+  const total = Object.keys(world).length;
+  document.getElementById("explore-pct").textContent = (discovered / total * 100).toFixed(1) + "%";
+  document.getElementById("move-count").textContent = moveCount;
+  document.getElementById("find-count").textContent = findCount;
+}
+
+function updateQuest() {
+  document.getElementById("quest-text").textContent = currentQuest.text;
+  document.getElementById("quest-hint").textContent = questHint(lat, lon, currentQuest);
+}
+
+function addLog(text, type = "") {
+  const log = document.getElementById("event-log");
+  const el = document.createElement("div");
+  el.className = "log-entry" + (type ? " " + type : "");
+  el.textContent = text;
+  log.prepend(el);
+  if (log.children.length > 80) log.lastChild.remove();
+}
+
+function catSay(text, speed = 28) {
+  typewriter(document.getElementById("cat-dialog"), text, speed);
+}
+
+function buildCatMessage(cell) {
+  let lines = [];
+  lines.push(catWeather(lat));
+  if (Math.random() < 0.4) {
+    let q = rnd(CAT_QUOTES).replace("{witch_name}", player.witch).replace("{cat_name}", player.cat);
+    lines.push(q);
+  }
+  const site = cell.site;
+  if (typeof site === "string") {
+    const msgs = {
+  "bosque": `${player.cat}: ¡Miau! El bosque de abajo parece una enorme alfombra verde.`,
+  "cordillera": `${player.cat}: ¡Miau! Las montañas son demasiado altas. Procura no estrellar el dirigible.`,
+  "desierto": `${player.cat}: ¡Miau! Todo es arena. Aquí no hay ni un pez.`,
+  "lago": `${player.cat}: ¡Miau! El lago parece un espejo azul.`,
+  "isla desierta": `${player.cat}: ¡Miau! Es perfecta para tomar el sol, pero no hay comida enlatada.`
+};
+
+if (msgs[site]) lines.push(msgs[site]);
+
+} else if (site && site.type === "nación") {
+
+  lines.push(`${player.cat}: ¡Miau! Este país parece un poco sospechoso.`);
+
+} else if (site && site.type === "tribu") {
+
+  lines.push(`${player.cat}: ¡Miau! ${player.witch}, ¿no deberíamos alejarnos volando cuanto antes?`);
+
+} else if (!site) {
+
+  if (!cell.sea_scene)
+    lines.push(`${player.cat}: ¡Miau... No hay absolutamente nada aquí.`);
+}
+  return lines.join("\n");
+}
+
+function describeCell() {
+  const cell = world[key(lat, lon)];
+  if (!cell.discovered) { cell.discovered = true; findCount++; }
+  updateInfo();
+  updateMap();
+  catSay(buildCatMessage(cell));
+
+  const site = cell.site;
+  if (site && typeof site === "object") {
+    addLog(`📍 ${coordText(lat, lon)} — ${site.type}「${site.name}」ser descubierto`, "highlight");
+  } else if (typeof site === "string") {
+    addLog(`📍 ${coordText(lat, lon)} — 「${site}」ser descubierto`, "highlight");
+  } else if (cell.sea_scene) {
+    addLog(`📍 ${coordText(lat, lon)} — 特殊mar「${cell.sea_scene.name}」`, "highlight");
+  } else {
+    addLog(`📍 ${coordText(lat, lon)} — ${cell.terrain}`);
+  }
+}
+
+function doMove(direction) {
+  let nla = lat, nlo = lon;
+  if (direction === "N") { nla = lat + STEP; if (nla >= LAT_LIMIT) { catSay(`${player.cat}："¡Miau! ¡El Ártico da demasiado miedo! No pienso seguir volando más al norte."`); return; } }
+  else if (direction === "S") { nla = lat - STEP; if (nla <= -LAT_LIMIT) { catSay(`${player.cat}："¡Miau! ¡La Antártida da demasiado miedo! No pienso seguir volando más al sur."`); return; } }
+  else if (direction === "E") { nlo = lon + STEP; if (nlo > 180) nlo = -170; }
+  else if (direction === "W") { nlo = lon - STEP; if (nlo < -180) nlo = 170; }
+
+  lat = nla; lon = nlo; moveCount++;
+  stepsAfterQuest++;
+  describeCell();
+  updateQuest();
+
+  if (checkQuest(lat, lon, currentQuest)) {
+    addLog(`★ ¡Misión cumplida!「${currentQuest.target}」のnaciónser descubierto！`, "quest");
+    const flash = document.getElementById("quest-flash");
+    flash.classList.add("show");
+    setTimeout(() => flash.classList.remove("show"), 2100);
+    currentQuest = makeQuest(world);
+    stepsAfterQuest = 0;
+    updateQuest();
+    addLog(`✦ nueva misión：${currentQuest.text}`, "quest");
+  } else if (stepsAfterQuest % 5 === 0) {
+    const hint = questHint(lat, lon, currentQuest);
+    addLog(`🐾 adivinación del gato negro：${hint}`);
+  }
+
+  if (rareEvents.length && Math.random() < 0.06) {
+    const ev = rnd(rareEvents);
+    rareEvents.splice(rareEvents.indexOf(ev), 1);
+    addLog(ev, "quest");
+    catSay(`${player.cat}：ニャー！${ev.replace(/^★ /,"")}`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════
+function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+function openModal(id)  { document.getElementById(id).classList.add("active"); }
+
+function showDiscoveredList() {
+  const el = document.getElementById("modal-log-content");
+  const discovered = Object.entries(world)
+    .filter(([,c]) => c.discovered)
+    .sort(([a],[b]) => a.localeCompare(b));
+  if (!discovered.length) { el.innerHTML = "<em>Todavía no hemos descubierto nada.</em>"; openModal("modal-log"); return; }
+  el.innerHTML = discovered.map(([k, cell]) => {
+    const [la, lo] = k.split(",").map(Number);
+    const site = cell.site;
+    let siteName = "特別な発見なし";
+    if (typeof site === "string") siteName = site;
+    else if (site && site.name) siteName = `${site.type}「${site.name}」`;
+    return `<div style="border-bottom:1px solid var(--parchment-dark);padding:2px 0">${coordText(la,lo)}：${cell.terrain} / ${siteName}</div>`;
+  }).join("");
+  openModal("modal-log");
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+function startGame() {
+  const witch = document.getElementById("witch-input").value.trim() || "Laura";
+  const cat   = document.getElementById("cat-input").value.trim()   || "Ares";
+  player = { witch, cat };
+
+  world = generateWorld();
+  lat = 0; lon = 0; moveCount = 0; findCount = 0; stepsAfterQuest = 0;
+  rareEvents = [...RARE_EVENTS_BASE];
+  currentQuest = makeQuest(world);
+
+  document.getElementById("start-screen").classList.remove("active");
+  document.getElementById("game-screen").classList.add("active");
+
+  document.getElementById("event-log").innerHTML = "";
+  addLog(`✦ ${witch} と ${cat} ¡Me voy!`, "quest");
+  addLog(`★ primera misión：${currentQuest.text}`, "quest");
+
+  describeCell();
+  updateQuest();
+  catSay(`${cat}：¡Miau, no choques!、${witch}。`);
+}
+
+// BUTTONS
+document.getElementById("start-btn").addEventListener("click", startGame);
+document.getElementById("witch-input").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("cat-input").focus(); });
+document.getElementById("cat-input").addEventListener("keydown", e => { if (e.key === "Enter") startGame(); });
+document.getElementById("btn-n").addEventListener("click", () => doMove("N"));
+document.getElementById("btn-s").addEventListener("click", () => doMove("S"));
+document.getElementById("btn-e").addEventListener("click", () => doMove("E"));
+document.getElementById("btn-w").addEventListener("click", () => doMove("W"));
+document.getElementById("btn-quest").addEventListener("click", () => updateQuest());
+document.getElementById("btn-hint").addEventListener("click", () => { const h = questHint(lat,lon,currentQuest); catSay(h); addLog(`🐾 ${h}`); });
+document.getElementById("btn-log").addEventListener("click", showDiscoveredList);
+document.getElementById("btn-help").addEventListener("click", () => openModal("modal-help"));
+document.getElementById("btn-new").addEventListener("click", () => {
+  document.getElementById("game-screen").classList.remove("active");
+  document.getElementById("start-screen").classList.add("active");
+});
+
+// KEYBOARD
+document.addEventListener("keydown", e => {
+  if (!document.getElementById("game-screen").classList.contains("active")) return;
+  const map = { n:"N", s:"S", e:"E", w:"W", arrowup:"N", arrowdown:"S", arrowright:"E", arrowleft:"W" };
+  const d = map[e.key.toLowerCase()];
+  if (d) { e.preventDefault(); doMove(d); }
+});
+
+// Close modals on overlay click
+document.querySelectorAll(".modal-overlay").forEach(el => {
+  el.addEventListener("click", evt => { if (evt.target === el) el.classList.remove("active"); });
+});
+</script>
 // Nota: Debido a la longitud, el script completo con todas las traducciones de arrays (nombres de países, misiones, diálogos del gato, etc.) está en el archivo que creé en el servidor. Si el copiar-pegar se corta, dime y te lo envío en partes o te doy el enlace de descarga directo.
 </script>
 </body>
